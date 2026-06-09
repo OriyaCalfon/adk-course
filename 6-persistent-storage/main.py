@@ -10,26 +10,27 @@ load_dotenv()
 
 # ===== PART 1: Initialize Persistent Session Service =====
 # Using SQLite database for persistent storage
-db_url = "sqlite:///./my_agent_data.db"
+# db_url = "sqlite:///./my_agent_data.db"
+db_url = "sqlite+aiosqlite:///./my_agent_data.db"
 session_service = DatabaseSessionService(db_url=db_url)
 
 
 # ===== PART 2: Define Initial State =====
 # This will only be used when creating a new session
 initial_state = {
-    "user_name": "Brandon Hancock",
+    "user_name": "Oriya",
     "reminders": [],
 }
 
 
 async def main_async():
     # Setup constants
-    APP_NAME = "Memory Agent"
-    USER_ID = "aiwithbrandon"
+    APP_NAME = "Memory_Agent"
+    USER_ID = "or"
 
     # ===== PART 3: Session Management - Find or Create =====
     # Check for existing sessions for this user
-    existing_sessions = session_service.list_sessions(
+    existing_sessions = await session_service.list_sessions(
         app_name=APP_NAME,
         user_id=USER_ID,
     )
@@ -41,7 +42,7 @@ async def main_async():
         print(f"Continuing existing session: {SESSION_ID}")
     else:
         # Create a new session with initial state
-        new_session = session_service.create_session(
+        new_session = await session_service.create_session(
             app_name=APP_NAME,
             user_id=USER_ID,
             state=initial_state,
